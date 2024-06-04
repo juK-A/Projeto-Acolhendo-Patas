@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Usuário</title>
+    <!-- Incluindo Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('css', filename='cad.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body style="background-color: #fbfbfb">
+    <nav
+      class="navbar navbar-expand-lg"
+      style="
+        background-color: #2a6f97;
+        height: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div class="container-fluid">
+        <a
+          class="navbar-brand"
+          href="{{ url_for('index') }}"
+          style="color: #fff; font-size: 1.5em"
+          ><strong>Acolhendo Patas</strong></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarScroll"
+          aria-controls="navbarScroll"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          style="border-color: #2a6f97"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+          <ul
+            class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+            style="--bs-scroll-height: 100px"
+          >
+            <li class="nav-item active">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}"
+                style="color: #2a6f97"
+                >Início <span class="sr-only"></span
+              ></a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}#sobre"
+                style="color: #2a6f97"
+                >Nossa História</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('processoadocao') }}"
+                role="button"
+                aria-expanded="false"
+                style="color: #2a6f97"
+                >Processo de adoção</a
+              >
+            </li>
+          </ul>
+        </div>
+        <a href="/login" class="btn btn-outline-light">Login</a>
+      </div>
+    </nav>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="cadastro-container">
+            {% with messages = get_flashed_messages(with_categories=true) %} {%
+            if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            <h2 class="text-center mb-4">Cadastro de Usuário</h2>
+            <form action="{{ url_for('cadastro') }}" method="post">
+              <div class="form-group">
+                <label class="label-ty" for="nome"><b>Nome:</b></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nome"
+                  name="nome"
+                  placeholder="Digite seu nome"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="estado"><b>Estado:</b></label>
+                <select class="form-control" id="estado" name="estado">
+                  <option value="">Selecione o estado</option>
+                  <option value="ac">AC</option>
+                  <option value="al">AL</option>
+                  <option value="amapa">AP</option>
+                  <option value="amazonas">AM</option>
+                  <option value="bahia">BA</option>
+                  <option value="ceara">CE</option>
+                  <option value="espiritosanto">ES</option>
+                  <option value="goias">GO</option>
+                  <option value="maranhao">MA</option>
+                  <option value="matogrosso">MT</option>
+                  <option value="matogrossodosul">MS</option>
+                  <option value="minas">MG</option>
+                  <option value="para">PA</option>
+                  <option value="paraiba">PB</option>
+                  <option value="parana">PR</option>
+                  <option value="pernambuco">PE</option>
+                  <option value="piaui">PI</option>
+                  <option value="rj">RJ</option>
+                  <option value="riograndenorte">RN</option>
+                  <option value="riograndesul">RS</option>
+                  <option value="rondonia">RO</option>
+                  <option value="roraima">RR</option>
+                  <option value="sc">SC</option>
+                  <option value="sp">SP</option>
+                  <option value="sergipe">SE</option>
+                  <option value="tocantins">TO</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="endereco"><b>Endereço:</b></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="endereco"
+                  name="endereco"
+                  placeholder="Ex: Rua das Flores, 123"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="cep"><b>CEP:</b></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cep"
+                  name="cep"
+                  placeholder="Digite seu CEP"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="cidade"><b>Cidade:</b></label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="cidade"
+                  name="cidade"
+                  placeholder="Ex: São Paulo"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="telefone"><b>Telefone:</b></label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="telefone"
+                  name="telefone"
+                  placeholder="Ex: 99 999999999"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="email"><b>E-mail:</b></label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="Ex: joao@gmail.com"
+                />
+              </div>
+              <div class="form-group">
+                <label class="label-ty" for="senha"><b>Senha:</b></label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="senha"
+                  name="senha"
+                  placeholder="Digite sua senha"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                Cadastrar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Incluindo Bootstrap JS (opcional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

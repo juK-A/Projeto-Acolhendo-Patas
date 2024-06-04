@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="{{ url_for('css', filename='style.css') }}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body><nav
+    class="navbar navbar-expand-lg"
+    style="
+      background-color: #2a6f97;
+      height: 100px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    "
+  >
+    <div class="container-fluid">
+      <a
+        class="navbar-brand"
+        href="index"
+        style="color: #fff; font-size: 1.5em"
+        ><strong>Acolhendo Patas</strong></a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarScroll"
+        aria-controls="navbarScroll"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        style="border-color: #2a6f97"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarScroll">
+        <ul
+          class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+          style="--bs-scroll-height: 100px"
+        >
+          <li class="nav-item active">
+            <a class="nav-link" href="index" style="color: #2a6f97"
+              >Início <span class="sr-only"></span
+            ></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index#sobre" style="color: #2a6f97"
+              >Nossa História</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="processoadocao"
+              role="button"
+              aria-expanded="false"
+              style="color: #2a6f97"
+            >
+              Processo de adoção
+            </a>
+          </li>
+        </ul>
+        
+        <form class="d-flex" role="search" style="padding-right: 60px">
+          {% if not nome_usuario %}
+          <a
+            class="btn btn-outline-light"
+            href="login"
+            style="background-color: #6b8c9f; color: #fff; margin: 5px"
+            >Login</a
+          >
+          <a
+            class="btn btn-outline-light"
+            href="cadastro"
+            style="background-color: #6b8c9f; color: #fff; margin: 5px"
+            >Cadastro</a
+          >
+          {% endif %}
+        </form>
+      </div>
+      <div class="d-flex align-items-center">
+        <a class="nav-link" href="meus_animais" style="color: #fff"
+          >Meu Perfil</a
+        >
+        {% if nome_usuario %}
+        <p class="mb-0 me-2" style="color: #fff">
+          Olá, {{ usuario.nome_capitalizado }}!
+        </p>
+        <a href="/logout" class="btn btn-outline-light ms-2">Sair</a>
+        {% else %}
+        <a href="/login" class="btn btn-outline-light">Login</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+  {% endfor %} {% endif %} {% endwith %}
+  <div class="container">
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h1 class="card-title text-center">Editar Perfil</h1>
+              <form action="{{ url_for('editar_usuario') }}" method="POST">
+                <div class="mb-3">
+                  <label for="nome" class="form-label">Nome:</label>
+                  <input
+                    type="text"
+                    name="nome"
+                    class="form-control"
+                    value="{{ usuario.nome }}"
+                    placeholder="Ex: João da Silva"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    value="{{ usuario.email }}"
+                    placeholder="Ex: joao@example.com"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="senha" class="form-label" >Nova Senha:</label>
+                  <input type="password" name="senha" class="form-control" />
+                </div>
+            
+                <div>
+                    <label for="telefone" class="form-label">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone" class="form-control" value="{{ endereco.telefone }}"  required>
+                </div>
+                <div>
+                    <label for="estado" class="form-label">Estado:</label>
+                    <input type="text" id="estado" name="estado" class="form-control" value="{{ endereco.estado }}" placeholder="Ex: sp" required>
+                </div>
+                <div>
+                    <label for="endereco" class="form-label">Endereço:</label>
+                    <input type="text" id="endereco" name="endereco" class="form-control" value="{{ endereco.endereco }}" placeholder="Ex: Rua das Flores, 123" required>
+                </div>
+                <div>
+                    <label for="cep" class="form-label">CEP:</label>
+                    <input type="text" id="cep" name="cep" class="form-control" value="{{ endereco.cep }}" placeholder="Ex: 12345-678" required>
+                </div>
+                <div>
+                    <label for="cidade" class="form-label">Cidade:</label>
+                    <input type="text" id="cidade" name="cidade" class="form-control" value="{{ endereco.cidade }}" placeholder="Ex: São Paulo" required>
+                </div>
+                <button type="submit" class="form-label">Salvar</button>
+                
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

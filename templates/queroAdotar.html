@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quero Adotar</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('css', filename='queroAdotar.css') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-lg"
+      action="{{ url_for('queroadotar') }}"
+      method="get"
+      style="
+        background-color: #2a6f97;
+        height: 100px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div class="container-fluid">
+        <a
+          class="navbar-brand"
+          href="{{ url_for('index') }}"
+          style="color: #fff; font-size: 1.5em"
+          ><strong>Acolhendo Patas</strong></a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarScroll"
+          aria-controls="navbarScroll"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          style="border-color: #2a6f97"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarScroll">
+          <ul
+            class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+            style="--bs-scroll-height: 100px"
+          >
+            <li class="nav-item active">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}"
+                style="color: #2a6f97"
+                >Início <span class="sr-only"></span
+              ></a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('index') }}#sobre"
+                style="color: #2a6f97"
+                >Nossa História</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('processoadocao') }}"
+                role="button"
+                aria-expanded="false"
+                style="color: #2a6f97"
+                >Processo de adoção</a
+              >
+            </li>
+          </ul>
+          <form class="d-flex" role="search" style="padding-right: 60px">
+            {% if not nome_usuario %}
+            <button
+              class="btn btn-outline-light"
+              type="submit"
+              style="
+                background-color: #6b8c9f;
+                width: 70%;
+                color: #fff;
+                margin: 5px;
+              "
+            >
+              <a href="{{ url_for('login') }}" style="color: #fff">Login</a>
+            </button>
+            <button
+              class="btn btn-outline-light"
+              type="submit"
+              style="
+                background-color: #6b8c9f;
+                width: 70%;
+                color: #fff;
+                margin: 5px;
+              "
+            >
+              <a href="{{ url_for('cadastro') }}" style="color: #fff"
+                >Cadastro</a
+              >
+            </button>
+            {% endif %}
+          </form>
+        </div>
+        <div class="d-flex align-items-center">
+          <a class="nav-link" href="meus_animais" style="color: #fff"
+            >Meu Perfil</a
+          >
+          {% if nome_usuario %}
+          <p class="mb-0 me-2" style="color: #fff">
+            Olá, {{ usuario.nome_capitalizado }}!
+          </p>
+          <a href="/logout" class="btn btn-outline-light ms-2">Sair</a>
+          {% else %}
+          <a href="/login" class="btn btn-outline-light">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-form">
+      <h1 class="title-form">Encontre seu novo amigo!</h1>
+
+      <!-- Formulário para adotar
+      <div class="content-form">
+        <select
+          class="form-select"
+          id="form-especie"
+          name="especie"
+          aria-label="Default select example"
+        >
+          <option selected>Todas as espécies</option>
+          <option value="dog">Cachorro</option>
+          <option value="cat">Gato</option>
+        </select>
+        <select
+          class="form-select"
+          name="sexo"
+          id="form-sexo"
+          aria-label="Default select example"
+        >
+          <option selected>Todos os sexos</option>
+          <option value="fem">Fêmea</option>
+          <option value="macho">Macho</option>
+        </select>
+        <select
+          class="form-select"
+          id="form-porte"
+          name="porte"
+          aria-label="Default select example"
+        >
+          <option selected>Todos os portes</option>
+          <option value="pequeno">Pequeno</option>
+          <option value="medio">Médio</option>
+          <option value="grande">Grande</option>
+        </select>
+
+        <button class="btn btn-primary" id="btn-buscar" style="width: 30%">
+          Buscar
+        </button>
+      </div> -->
+
+      <!-- Cards -->
+      <div class="card-container">
+        {% for item in animal_info %}
+        <div class="card" style="width: 18rem">
+          <img
+            class="card-img-top custom-img"
+            src="{{ item.imagem.url or './img/default-image.png' }}"
+            alt="Imagem de capa do card"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ item.animal.nome.capitalize() }}</h5>
+            <p class="card-text">Raça: {{ item.animal.raca }}</p>
+            <p class="card-text">
+              Idade: {% if item.animal.idade != 'Desconhecida' %}{{
+              item.animal.idade }} anos{% else %}Desconhecida{% endif %}
+            </p>
+            <p class="card-text">Cidade: {{ item.endereco.cidade }}</p>
+            <p class="card-text">Porte: {{ item.animal.porte }}</p>
+            <p class="card-text">Sexo: {{ item.animal.sexo }}</p>
+            <p class="card-text">Contato: {{ item.endereco.telefone }}</p>
+            <a
+              href="{{ url_for('detalhes_animal', animal_id=item.animal.id) }}"
+              class="btn btn-primary"
+              >Adotar</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("btn-buscar")
+          .addEventListener("click", function () {
+            var especie = document.getElementById("form-especie").value;
+            var sexo = document.getElementById("form-sexo").value;
+            var porte = document.getElementById("form-porte").value;
+
+            // Construir a URL com os parâmetros de filtro
+            var url =
+              "/queroadotar?especie=" +
+              especie +
+              "&sexo=" +
+              sexo +
+              "&porte=" +
+              porte;
+
+            // Fazer a solicitação à rota /queroadotar
+            fetch(url, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((response) => response.text())
+              .then((html) => {
+                // Atualizar o conteúdo da página com a resposta do servidor
+                var cardContainer = document.querySelector(".card-container");
+                cardContainer.innerHTML = "";
+                cardContainer.insertAdjacentHTML("beforeend");
+              })
+              .catch((error) => {
+                console.error("Erro ao buscar os animais:", error);
+              });
+          });
+      });
+    </script> -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
